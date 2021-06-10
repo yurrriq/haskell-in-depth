@@ -1,0 +1,18 @@
+name: haskell-in-depth
+version: !include "./VERSION"
+synopsis: Working through 'Haskell in Depth'
+author: Eric Bailey
+maintainer: eric@ericb.me
+github: yurrriq/haskell-in-depth
+dependencies:
+- base
+ghc-options:
+- -Wall
+- -Werror
+library:
+  ghc-options:
+  - -fwarn-incomplete-patterns
+  source-dirs: src
+  # exposed-modules: []
+  # other-modules: []
+  # dependencies: []

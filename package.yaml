@@ -11,9 +11,9 @@ ghc-options:
 - -Wall
 - -Werror
 executables:
-  vocab1:
+  vocab-builder:
     ghc-options:
     - -O2
     source-dirs: ch01
-    main: vocab1.hs
+    main: vocab2.hs
     dependencies: []

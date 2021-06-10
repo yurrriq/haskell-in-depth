@@ -6,13 +6,14 @@ maintainer: eric@ericb.me
 github: yurrriq/haskell-in-depth
 dependencies:
 - base
+- text
 ghc-options:
 - -Wall
 - -Werror
-library:
-  ghc-options:
-  - -fwarn-incomplete-patterns
-  source-dirs: src
-  # exposed-modules: []
-  # other-modules: []
-  # dependencies: []
+executables:
+  vocab1:
+    ghc-options:
+    - -O2
+    source-dirs: ch01
+    main: vocab1.hs
+    dependencies: []

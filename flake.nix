@@ -2,25 +2,29 @@
   description = "Working through 'Haskell in Depth'";
 
   inputs = {
-
     flake-utils.url = "github:numtide/flake-utils";
 
     nixpkgs.url = "github:nixos/nixpkgs/release-21.05";
-
   };
 
   outputs = { self, flake-utils, nixpkgs }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in
 
-    flake-utils.lib.eachDefaultSystem (system: {
+      {
+        defaultPackage = pkgs.haskellPackages.callCabal2nix "haskell-in-depth" self { };
 
-      devShell = with nixpkgs.legacyPackages.${system}; mkShell {
-        buildInputs = [
-          cargo
-          gitAndTools.pre-commit
-          nixpkgs-fmt
-        ];
-      };
-
-    });
-
+        devShell = with pkgs; mkShell {
+          buildInputs = self.defaultPackage.${system}.env.nativeBuildInputs ++ (
+            with pkgs; [
+              cargo
+              gitAndTools.pre-commit
+              haskellPackages.ormolu
+              nixpkgs-fmt
+            ]
+          );
+        };
+      });
 }

@@ -8,12 +8,39 @@
   };
 
   outputs = { self, flake-utils, nixpkgs }:
-    flake-utils.lib.eachDefaultSystem (system:
+    let
+      supportedSystems = [ "x86_64-linux" ];
+    in
+    {
+      overlay = final: prev: {
+        haskellPackages = prev.haskellPackages.override {
+          overrides = hfinal: hprev: {
+            formatting = hprev.callHackageDirect
+              {
+                pkg = "formatting";
+                ver = "7.1.2";
+                sha256 = "sha256-sbHPbVcLDgymul0x0q2c7ZCej+0IV1P1aqGLt9JpfL0=";
+              }
+              { };
+          };
+        };
+      };
+    } //
+    flake-utils.lib.eachSystem supportedSystems (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          overlays = [ self.overlay ];
+          inherit system;
+        };
       in
-
       {
+        apps = {
+          vocab-builder = flake-utils.lib.mkApp {
+            name = "vocab-builder";
+            drv = self.defaultPackage.${system};
+          };
+        };
+
         defaultPackage = pkgs.haskellPackages.callCabal2nix "haskell-in-depth" self { };
 
         devShell = with pkgs; mkShell {

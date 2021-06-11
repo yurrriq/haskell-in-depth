@@ -6,14 +6,17 @@ maintainer: eric@ericb.me
 github: yurrriq/haskell-in-depth
 dependencies:
 - base
+- formatting
 - text
 ghc-options:
 - -Wall
 - -Werror
+default-extensions:
+- OverloadedStrings
 executables:
   vocab-builder:
     ghc-options:
     - -O2
     source-dirs: ch01
-    main: vocab2.hs
+    main: vocab3.hs
     dependencies: []

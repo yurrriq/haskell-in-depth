@@ -26,3 +26,11 @@ repos:
     types: [text]
   repo: git://github.com/detailyang/pre-commit-shell
   rev: v1.0.6
+- hooks:
+  - description: Prettify Haskell code with ormolu
+    entry: "ormolu --mode inplace"
+    files: '.+\.hs$'
+    id: ormolu
+    language: system
+    name: Prettify Haskell code
+  repo: local

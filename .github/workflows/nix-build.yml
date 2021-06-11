@@ -24,7 +24,6 @@ jobs:
         name: yurrriq
         skipPush: true
     - name: Build project
-      run: nix build
+      run: nix build --show-trace --verbose
     - name: Run vocab-builer
-      run: |
-        nix run .#vocab-builder -- --help
+      run: nix run .#vocab-builder -- --help

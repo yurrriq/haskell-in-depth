@@ -19,9 +19,11 @@
         devShell = with pkgs; mkShell {
           buildInputs = self.defaultPackage.${system}.env.nativeBuildInputs ++ (
             with pkgs; [
+              cabal-install
               cargo
               gitAndTools.pre-commit
               haskellPackages.ormolu
+              haskellPackages.pointfree
               nixpkgs-fmt
             ]
           );

@@ -25,3 +25,6 @@ jobs:
         skipPush: true
     - name: Build project
       run: nix build
+    - name: Run vocab-builer
+      run: |
+        nix run .#vocab-builder -- --help

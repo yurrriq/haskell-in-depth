@@ -7,12 +7,12 @@ github: yurrriq/haskell-in-depth
 dependencies:
 - base
 - formatting
+- lens
+- optparse-applicative
 - text
 ghc-options:
 - -Wall
 - -Werror
-default-extensions:
-- OverloadedStrings
 executables:
   vocab-builder:
     ghc-options:

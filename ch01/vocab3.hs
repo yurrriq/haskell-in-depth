@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 import Control.Arrow ((&&&), (***), (>>>))
+import Control.Lens (makeLenses, (^.))
 import Control.Monad (when)
 import Data.Char (isLetter)
 import Data.List (group, sort, sortBy)
@@ -10,32 +12,56 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 import Formatting (Format (..), bprint, int, later, sformat, stext, (%))
 import Formatting.Combinators (indentedLines)
-import System.Environment (getArgs)
+import Options.Applicative
 
 type Entry = (Text, Int)
 
 type Vocabulary = [Entry]
 
-main :: IO ()
-main =
-  do
-    args <- getArgs
-    case args of
-      ["-a", fname, num] ->
-        processTextFile fname True (read num)
-      [fname, num] ->
-        processTextFile fname False (read num)
-      _ ->
-        putStrLn "Usage: vocab-builder [-a] FILENAME FREQ_WORDS_NUM"
+data VocabBuilder = VocabBuilder
+  { _withAllWords :: Bool,
+    _numberOfFrequentWords :: Int,
+    _filePath :: FilePath
+  }
 
-processTextFile :: FilePath -> Bool -> Int -> IO ()
-processTextFile fname withAllWords n =
+makeLenses ''VocabBuilder
+
+main :: IO ()
+main = buildVocab =<< execParser opts
+  where
+    opts =
+      info
+        (vocabBuilder <**> helper)
+        ( fullDesc
+            <> progDesc "Extract the vocabulary of a text file and print reports about it"
+            <> header "vocab-builder - extract vocabulary from a file"
+        )
+
+vocabBuilder :: Parser VocabBuilder
+vocabBuilder =
+  VocabBuilder
+    <$> switch
+      ( short 'a'
+          <> help "Whether to print all words used in the text"
+      )
+    <*> option
+      auto
+      ( short 'n'
+          <> help "The number of most frequently used words to print"
+          <> showDefault
+          <> value 5
+          <> metavar "FREQ_WORDS_NUM"
+      )
+    <*> argument str (metavar "FILE")
+
+buildVocab :: VocabBuilder -> IO ()
+buildVocab opts =
   do
-    vocab <- extractVocab <$> TIO.readFile fname
-    when withAllWords $
+    vocab <- extractVocab <$> TIO.readFile (opts ^. filePath)
+    when (opts ^. withAllWords) $
       TIO.putStrLn (allWordsReport vocab)
     TIO.putStrLn (wordCountReport vocab)
-    TIO.putStrLn (frequentWordsReport vocab n)
+    TIO.putStrLn (frequentWordsReport vocab (opts ^. numberOfFrequentWords))
 
 allWordsReport :: Vocabulary -> Text
 allWordsReport = T.unlines . ("All words" :) . allWords

@@ -4,19 +4,32 @@ synopsis: Working through 'Haskell in Depth'
 author: Eric Bailey
 maintainer: eric@ericb.me
 github: yurrriq/haskell-in-depth
+data-files:
+- data/*.txt
 dependencies:
 - base
 - formatting
 - lens
 - optparse-applicative
 - text
+- trifecta
 ghc-options:
 - -Wall
 - -Werror
+library:
+  source-dirs:
+  - ch01
+  - ch02
 executables:
   vocab-builder:
     ghc-options:
     - -O2
     source-dirs: ch01
     main: vocab3.hs
-    dependencies: []
+  radar:
+    ghc-options:
+    - -O2
+    source-dirs: ch02/radar
+    main: Main.hs
+    dependencies:
+    - haskell-in-depth

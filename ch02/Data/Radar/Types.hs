@@ -9,7 +9,7 @@ data Direction
   | East
   | South
   | West
-  deriving (Eq, Enum, Bounded, CyclicEnum)
+  deriving (Eq, Ord, Enum, Bounded, CyclicEnum)
 
 instance Show Direction where
   show North = "N"
@@ -22,7 +22,7 @@ data Turn
   | TLeft
   | TRight
   | TAround
-  deriving (Eq, Enum, Bounded)
+  deriving (Eq, Ord, Enum, Bounded)
 
 instance Show Turn where
   show TNone = "--"

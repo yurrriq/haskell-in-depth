@@ -33,3 +33,14 @@ executables:
     main: Main.hs
     dependencies:
     - haskell-in-depth
+tests:
+  radar-tests:
+    main: Test/Radar.hs
+    source-dirs: test/radar
+    dependencies:
+    - haskell-in-depth
+    - hedgehog
+    - tasty
+    - tasty-discover
+    - tasty-hedgehog
+    - tasty-hunit

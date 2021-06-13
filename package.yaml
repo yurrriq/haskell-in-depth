@@ -12,6 +12,7 @@ dependencies:
 - lens
 - optparse-applicative
 - text
+- text-show
 - trifecta
 ghc-options:
 - -Wall

@@ -52,7 +52,9 @@
             with pkgs; [
               cabal-install
               cargo
+              ghcid
               gitAndTools.pre-commit
+              haskell-language-server
               haskellPackages.ormolu
               haskellPackages.pointfree
               nixpkgs-fmt

@@ -7,13 +7,22 @@ github: yurrriq/haskell-in-depth
 data-files:
 - data/*.txt
 dependencies:
+- Chart
+- Chart-diagrams
 - base
+# FIXME: - blaze-colonnade
+- blaze-html
+- bytestring
+- cassava
+# FIXME: - colonnade
 - formatting
 - lens
 - optparse-applicative
 - text
 - text-show
+- time
 - trifecta
+- vector
 ghc-options:
 - -Wall
 - -Werror

@@ -1,9 +1,20 @@
 {-# LANGUAGE DeriveAnyClass #-}
 
-module Data.Radar where
+module Data.Radar
+  ( module Data.Radar.Parsers,
+    module Data.Radar.Types,
+    rotate,
+    rotateMany,
+    rotateManySteps,
+    orient,
+    orientMany,
+    orientFromFile,
+  )
+where
 
 import Data.Foldable (find)
 import Data.Maybe (fromJust)
+import Data.Radar.Parsers
 import Data.Radar.Types
 import HID.CyclicEnum
 

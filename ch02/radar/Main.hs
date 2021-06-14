@@ -1,8 +1,6 @@
 import Control.Monad.IO.Class (liftIO)
 import Data.List (intercalate)
 import Data.Radar
-import Data.Radar.Parsers
-import Data.Radar.Types
 import Paths_haskell_in_depth (getDataFileName)
 import Text.Trifecta (Parser, Result (..), parseFromFileEx, some)
 

@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-orphans #-}
+
 module Data.Person.ImplementedShow where
 
 import Data.Person

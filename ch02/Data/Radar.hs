@@ -33,7 +33,7 @@ rotateManySteps = scanl (flip rotate)
 orient :: Direction -> Direction -> Turn
 orient from to =
   fromJust $
-    find (\turn -> rotate turn from == to) $
+    find (\tern -> rotate tern from == to) $
       enumFrom minBound
 
 orientMany :: [Direction] -> [Turn]

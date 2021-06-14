@@ -35,6 +35,10 @@
       in
       {
         apps = {
+          radar = flake-utils.lib.mkApp {
+            name = "radar";
+            drv = self.defaultPackage.${system};
+          };
           vocab-builder = flake-utils.lib.mkApp {
             name = "vocab-builder";
             drv = self.defaultPackage.${system};

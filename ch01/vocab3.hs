@@ -5,8 +5,8 @@ import Control.Arrow ((&&&), (***), (>>>))
 import Control.Lens (makeLenses, (^.))
 import Control.Monad (when)
 import Data.Char (isLetter)
-import Data.List (group, sort, sortBy)
-import Data.Ord (Down (..), comparing)
+import Data.List (group, sort, sortOn)
+import Data.Ord (Down (..))
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
@@ -83,13 +83,13 @@ extractVocab text = map buildEntry (group (sort wordz))
 wordCountReport :: Vocabulary -> Text
 wordCountReport =
   wordCount
-    >>> (mkReport "Total number of words" *** mkReport "Number of unique words")
+    >>> mkReport "Total number of words" *** mkReport "Number of unique words"
     >>> uncurry T.append
   where
     mkReport = sformat (stext % ": " % int % "\n")
 
 wordCount :: Vocabulary -> (Int, Int)
-wordCount = (sum . map snd &&& length)
+wordCount = sum . map snd &&& length
 
 frequentWordsReport :: Vocabulary -> Int -> Text
 frequentWordsReport vocab n =
@@ -100,4 +100,4 @@ sentry :: Format r (Entry -> r)
 sentry = later (bprint stext . fst <> pure ": " <> bprint int . snd)
 
 wordsByFrequency :: Vocabulary -> Vocabulary
-wordsByFrequency = sortBy (comparing (Down . snd))
+wordsByFrequency = sortOn (Down . snd)

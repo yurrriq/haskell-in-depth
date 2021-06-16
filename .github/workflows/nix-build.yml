@@ -27,3 +27,7 @@ jobs:
       run: nix build --show-trace --verbose
     - name: Run vocab-builer
       run: nix run .#vocab-builder -- --help
+    - name: Run radar
+      run: nix run .#radar
+    - name: Run du
+      run: nix run .#du -- --help

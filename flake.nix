@@ -2,12 +2,14 @@
   description = "Working through 'Haskell in Depth'";
 
   inputs = {
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+
     flake-utils.url = "github:numtide/flake-utils";
 
     nixpkgs.url = "github:nixos/nixpkgs/release-21.05";
   };
 
-  outputs = { self, flake-utils, nixpkgs }:
+  outputs = { self, emacs-overlay, flake-utils, nixpkgs }:
     let
       supportedSystems = [ "x86_64-linux" ];
     in
@@ -24,17 +26,28 @@
               { };
           };
         };
+
+        myEmacs = prev.emacsWithPackagesFromUsePackage {
+          alwaysEnsure = true;
+          config = ./emacs.el;
+        };
       };
     } //
     flake-utils.lib.eachSystem supportedSystems (system:
       let
         pkgs = import nixpkgs {
-          overlays = [ self.overlay ];
+          overlays = [
+            emacs-overlay.overlay
+            self.overlay
+          ];
           inherit system;
         };
       in
       {
         apps = {
+          du = flake-utils.lib.mkApp {
+            drv = self.packages.${system}.du;
+          };
           radar = flake-utils.lib.mkApp {
             name = "radar";
             drv = self.defaultPackage.${system};
@@ -45,7 +58,7 @@
           };
         };
 
-        defaultPackage = pkgs.haskellPackages.callCabal2nix "haskell-in-depth" self { };
+        defaultPackage = self.packages.${system}.haskell-in-depth;
 
         devShell = with pkgs; mkShell {
           buildInputs = self.defaultPackage.${system}.env.nativeBuildInputs ++ (
@@ -57,9 +70,15 @@
               haskell-language-server
               haskellPackages.ormolu
               haskellPackages.pointfree
+              myEmacs
               nixpkgs-fmt
             ]
           );
+        };
+
+        packages = {
+          du = pkgs.haskellPackages.callCabal2nix "du" ./du { };
+          haskell-in-depth = pkgs.haskellPackages.callCabal2nix "haskell-in-depth" self { };
         };
       });
 }

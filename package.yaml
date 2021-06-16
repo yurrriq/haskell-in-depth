@@ -1,5 +1,5 @@
 name: haskell-in-depth
-version: !include "./VERSION"
+version: 0.1.2.0
 synopsis: Working through 'Haskell in Depth'
 author: Eric Bailey
 maintainer: eric@ericb.me
@@ -16,6 +16,7 @@ dependencies:
 - cassava
 # FIXME: - colonnade
 - formatting
+- mtl
 - lens
 - optparse-applicative
 - text

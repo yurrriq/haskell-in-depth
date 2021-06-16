@@ -77,6 +77,7 @@
         };
 
         packages = {
+          containers-mini = pkgs.haskellPackages.callCabal2nix "containers-mini" ./containers-mini { };
           du = pkgs.haskellPackages.callCabal2nix "du" ./du { };
           haskell-in-depth = pkgs.haskellPackages.callCabal2nix "haskell-in-depth" self { };
         };

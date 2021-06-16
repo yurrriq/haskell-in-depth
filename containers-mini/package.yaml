@@ -1,5 +1,5 @@
 name: containers-mini
-version: !include "./VERSION"
+version: 0.0.1.0
 synopsis: Working through 'Haskell in Depth'
 author: Eric Bailey
 maintainer: eric@ericb.me

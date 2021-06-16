@@ -16,7 +16,6 @@ dependencies:
 - cassava
 # FIXME: - colonnade
 - formatting
-- mtl
 - lens
 - optparse-applicative
 - text

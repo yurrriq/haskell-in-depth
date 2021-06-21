@@ -58,22 +58,30 @@
           };
         };
 
-        defaultPackage = self.packages.${system}.haskell-in-depth;
+        defaultPackage = pkgs.symlinkJoin {
+          name = "haskell-in-depth";
+          paths = builtins.attrValues self.packages.${system};
+        };
 
         devShell = with pkgs; mkShell {
-          buildInputs = self.defaultPackage.${system}.env.nativeBuildInputs ++ (
-            with pkgs; [
-              cabal-install
-              cargo
-              ghcid
-              gitAndTools.pre-commit
-              haskell-language-server
-              haskellPackages.ormolu
-              haskellPackages.pointfree
-              myEmacs
-              nixpkgs-fmt
-            ]
-          );
+          buildInputs = with pkgs; [
+            cabal-install
+            cargo
+            ghcid
+            (
+              haskellPackages.ghcWithPackages (_:
+                builtins.concatMap
+                  (pkg: pkg.getBuildInputs.haskellBuildInputs)
+                  (builtins.attrValues self.packages.${system})
+              )
+            )
+            gitAndTools.pre-commit
+            haskell-language-server
+            haskellPackages.ormolu
+            haskellPackages.pointfree
+            myEmacs
+            nixpkgs-fmt
+          ];
         };
 
         packages = {

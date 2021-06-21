@@ -4,5 +4,5 @@
 ((haskell-mode
    . ((eval
         . (progn
-            (lsp-workspace-folders-add default-directory)
+            ;; (call-interactively 'lsp-workspace-folders-add)
             (interactive-haskell-mode))))))

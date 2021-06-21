@@ -1,0 +1,26 @@
+name: clac-hs
+version: 0.0.1.0
+synopsis: clac re-implemented in Haskell for my own edification.
+author: Eric Bailey
+maintainer: eric@ericb.me
+github: yurrriq/haskell-in-depth
+dependencies:
+- base
+- exceptions
+- haskeline
+- mtl
+- optparse-applicative
+- text
+default-extensions: []
+ghc-options:
+- -Wall
+- -Werror
+library:
+  source-dirs: src
+executable:
+  ghc-options:
+  - -O2
+  main: Main.hs
+  source-dirs: app
+  dependencies:
+  - clac-hs

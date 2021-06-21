@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -13,8 +14,7 @@ main = runInputT settings loop
   where
     loop =
       do
-        minput <- getInputLine "> "
-        case minput of
+        getInputLine "> " >>= \case
           Nothing -> pure ()
           Just input -> liftIO (process input) >> loop
     settings =
@@ -27,7 +27,8 @@ main = runInputT settings loop
 process :: String -> IO ()
 process line =
   do
-    let res = evalState (runExceptT (clac (fromString line))) ([], [])
+    let (res, st) = runState (runExceptT (clac (fromString line))) ([], [])
+    print st
     case res of
       Left (NotANumber _) ->
         putStrLn "= nan"

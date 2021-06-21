@@ -7,7 +7,6 @@ import Control.Arrow
 import Control.Monad.Except
 import Control.Monad.State
 import Data.Foldable (traverse_)
--- import Data.Char
 import Data.List (uncons)
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -24,8 +23,29 @@ data EvalError
   | EmptyStash
   deriving (Eq, Show)
 
+clac :: Text -> EvalM Integer
+clac txt =
+  do
+    put ([], [])
+    traverse_ step (T.words txt)
+    ensureSingletonStack
+    pop
+  where
+    step :: Text -> EvalM ()
+    step "+" = binop (+)
+    step "*" = binop (*)
+    step "-" = binop (-)
+    step "." = pop >>= stashItem
+    step ":" = gets fst >>= stashStack >> modify (first (const []))
+    step "," = fetchItem >>= push
+    step ";" = fetchStack
+    step t = readNumber t >>= push
+
+    binop :: (Integer -> Integer -> Integer) -> EvalM ()
+    binop op = flip op <$> pop <*> pop >>= push
+
 push :: Integer -> EvalM ()
-push x = modify (first (x :))
+push = modify . first . (:)
 
 pop :: EvalM Integer
 pop =
@@ -36,6 +56,12 @@ pop =
 ensureSingletonStack :: EvalM ()
 ensureSingletonStack = gets ((/= 1) . length) ~~> throwError ExtraElements
 
+stashItem :: Integer -> EvalM ()
+stashItem = modify . second . (:)
+
+stashStack :: Stack -> EvalM ()
+stashStack = traverse_ (modify . second . (:))
+
 fetchItem :: EvalM Integer
 fetchItem =
   gets (uncons . snd) >>= \case
@@ -44,28 +70,14 @@ fetchItem =
     Just (x, xs) ->
       modify (second (const xs)) >> pure x
 
+fetchStack :: EvalM ()
+fetchStack = gets snd >>= traverse_ push >> modify (second (const []))
+
 readNumber :: Text -> EvalM Integer
 readNumber txt =
   case decimal txt of
     Right (n, rest) | T.null rest -> pure n
     _ -> throwError (NotANumber txt)
-
-clac :: Text -> EvalM Integer
-clac txt =
-  do
-    put ([], [])
-    traverse_ step (T.words txt)
-    ensureSingletonStack
-    pop
-
-step :: Text -> EvalM ()
-step "+" = binop (+)
-step "*" = binop (*)
-step "-" = binop (-)
-step t = readNumber t >>= push
-
-binop :: (Integer -> Integer -> Integer) -> EvalM ()
-binop op = flip op <$> pop <*> pop >>= push
 
 infixl 4 ~~>
 

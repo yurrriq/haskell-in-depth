@@ -52,6 +52,9 @@
             name = "radar";
             drv = self.defaultPackage.${system};
           };
+          suntimes = flake-utils.lib.mkApp {
+            drv = self.packages.${system}.suntimes;
+          };
           vocab-builder = flake-utils.lib.mkApp {
             name = "vocab-builder";
             drv = self.defaultPackage.${system};
@@ -88,6 +91,7 @@
           containers-mini = pkgs.haskellPackages.callCabal2nix "containers-mini" ./containers-mini { };
           du = pkgs.haskellPackages.callCabal2nix "du" ./du { };
           haskell-in-depth = pkgs.haskellPackages.callCabal2nix "haskell-in-depth" self { };
+          suntimes = pkgs.haskellPackages.callCabal2nix "suntimes" ./suntimes { };
         };
       });
 }

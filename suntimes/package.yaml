@@ -1,0 +1,32 @@
+name: suntimes
+version: 0.0.1.0
+synopsis: Computing sunrise and sunset times at the given location
+author: Eric Bailey
+maintainer: eric@ericb.me
+github: yurrriq/haskell-in-depth
+dependencies:
+- aeson
+- base
+- bytestring
+- exceptions
+- extra
+- http-client
+- linear
+- mtl
+- optparse-applicative
+- req
+- text
+- time
+default-extensions: []
+ghc-options:
+- -Wall
+- -Werror
+library:
+  source-dirs: src
+executable:
+  ghc-options:
+  - -O2
+  main: Main.hs
+  source-dirs: app
+  dependencies:
+  - suntimes
